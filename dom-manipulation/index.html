@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Quote Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Dynamic Quote Generator</h1>
+
+    <!-- Display -->
+    <section id="quoteCard" class="card" aria-live="polite">
+      <blockquote id="quoteText">Click “Show New Quote” 👇</blockquote>
+      <p id="quoteCategory" class="category"></p>
+    </section>
+
+    <!-- Controls -->
+    <section class="controls">
+      <label for="categoryFilter">Filter by category:</label>
+      <select id="categoryFilter">
+        <option value="__all__">All</option>
+      </select>
+
+      <button id="newQuote" type="button">Show New Quote</button>
+    </section>
+
+    <hr/>
+
+    <!-- Add Quote Form (created dynamically too) -->
+    <section id="addQuoteSection">
+      <h2>Add a New Quote</h2>
+      <!-- This is created by createAddQuoteForm() to meet the brief -->
+      <div id="addQuoteFormMount"></div>
+    </section>
+
+    <!-- Log list (demonstrates DOM insert/remove) -->
+    <section>
+      <h3>Recently Added</h3>
+      <ul id="recentList" class="recent"></ul>
+    </section>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
