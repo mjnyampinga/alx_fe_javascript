@@ -28,14 +28,21 @@
 
     <hr/>
 
-    <!-- Add Quote Form (created dynamically too) -->
+    <!-- Import / Export -->
+    <section class="controls">
+      <button id="exportJson" type="button">Export JSON</button>
+
+      <!-- native file input, kept visible per brief -->
+      <input type="file" id="importFile" accept=".json,application/json" />
+      <button id="importBtn" type="button">Import JSON</button>
+    </section>
+
+    <!-- Add Quote (built dynamically) -->
     <section id="addQuoteSection">
       <h2>Add a New Quote</h2>
-      <!-- This is created by createAddQuoteForm() to meet the brief -->
       <div id="addQuoteFormMount"></div>
     </section>
 
-    <!-- Log list (demonstrates DOM insert/remove) -->
     <section>
       <h3>Recently Added</h3>
       <ul id="recentList" class="recent"></ul>
