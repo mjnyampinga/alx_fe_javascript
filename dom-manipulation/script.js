@@ -187,7 +187,8 @@ function appendRecent(q) {
 }
 
 // ---- JSON Export / Import ----
-function exportQuotesToJson() {
+function exportToJsonFile() {
+
   try {
     const data = JSON.stringify(quotes, null, 2);
     const blob = new Blob([data], { type: "application/json" });
@@ -274,3 +275,28 @@ function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+document.getElementById("exportJson").addEventListener("click", exportToJsonFile);
+
+function importFromJsonFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const importedQuotes = JSON.parse(e.target.result);
+    if (!Array.isArray(importedQuotes)) {
+      alert("Invalid JSON file.");
+      return;
+    }
+    importedQuotes.forEach(q => {
+      if (q.text && q.category && !quotes.some(m => m.text === q.text && m.category === q.category)) {
+        quotes.push(q);
+      }
+    });
+    saveQuotes(quotes);
+    renderCategories();
+    showRandomQuote();
+    alert("Quotes imported successfully!");
+  };
+  reader.readAsText(file);
+}
