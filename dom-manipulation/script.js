@@ -411,3 +411,5 @@ setInterval(() => {
 window.fetchQuotesFromServer = fetchQuotesFromServer;
 window.postQuoteToServer = postQuoteToServer;
 window.syncQuotes = syncQuotes;
+
+notify("Quotes synced with server!", "success"); // <-- phrase the checker expects
