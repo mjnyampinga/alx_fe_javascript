@@ -40,6 +40,10 @@ const addMount    = document.getElementById("addQuoteFormMount");
 const exportBtn   = document.getElementById("exportJson");
 const importInput = document.getElementById("importFile");
 
+// === ADDED: sync UI handles (safe if not present) ===
+const syncBtn      = document.getElementById("syncNow");
+const syncStatusEl = document.getElementById("syncStatus");
+
 // optional legacy element some graders scan for
 const quoteDisplayEl = document.getElementById("quoteDisplay");
 
@@ -348,8 +352,18 @@ function notify(message, type = "notice") {
   setTimeout(() => el.remove(), 4000);
 }
 
+// === ADDED: small helper to reflect sync status (no-op if UI not present) ===
+function setSyncStatus(message, kind = "ok") {
+  if (!syncStatusEl) return;
+  syncStatusEl.hidden = false;
+  syncStatusEl.textContent = message;
+  syncStatusEl.setAttribute("data-kind", kind);
+}
+
 async function syncWithServer() {
   try {
+    setSyncStatus("Syncing…", "syncing"); // ADDED
+
     await pushPendingToServer();
     const serverQuotes = await pullFromServer();
     const merged = resolveConflicts(serverQuotes);
@@ -362,9 +376,12 @@ async function syncWithServer() {
       showRandomQuote();
       notify("Synced with server (server-wins).", "success");
     }
+
+    setSyncStatus(`Last synced: ${new Date().toLocaleTimeString()}`, "ok"); // ADDED
   } catch (e) {
     console.error(e);
     notify("Sync failed. Will retry.", "error");
+    setSyncStatus("Sync failed. Will retry automatically.", "error"); // ADDED
   }
 }
 
@@ -394,6 +411,9 @@ function init() {
   exportBtn.addEventListener("click", exportToJsonFile);
   importInput.addEventListener("change", importFromJsonFile);
 
+  // === ADDED: manual sync button (if present) ===
+  if (syncBtn) syncBtn.addEventListener("click", () => syncWithServer());
+
   // initial sync then periodic syncs
   syncWithServer();
   setInterval(syncWithServer, SYNC_INTERVAL_MS);
@@ -407,3 +427,5 @@ window.filterQuote  = filterQuote;
 window.exportToJsonFile = exportToJsonFile;
 window.importFromJsonFile = importFromJsonFile;
 window.selectedCategory = selectedCategory;
+// ADDED: handy for testing
+window.syncWithServer = syncWithServer;
